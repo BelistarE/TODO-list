@@ -1,7 +1,7 @@
 @import url('reset.css');
 
 :root {
-    --accent-color: red;
+    --accent-color: #de4c4a;
     --sidebar-color: #262626;
     --body-color: #1e1e1e;
   }
@@ -75,4 +75,16 @@ body {
   }
   #header-right > div:hover{
     background-color: #322f2a;
+  }
+  #add-task{
+    color: var(--accent-color);
+    font-weight: bold;
+  }
+
+  #add-task > img {
+    filter: none;
+  }
+  /*--------main styling------- */
+  .main{
+    width: 100%;
   }

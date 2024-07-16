@@ -9,10 +9,11 @@ import searchIcon from './icons/magnify.svg';
 import upcomingIcon from './icons/calendar-range-outline.svg';
 import sidebarIcon from './icons/sidebar.png';
 let name = "beli";
+
 function loadContent (name){
     document.addEventListener("DOMContentLoaded", () => {
         const app = document.getElementById('app');
-      
+       
         function appendSidebar() {
             const sidebar = document.createElement('div');
             sidebar.classList.add('sidebar');
@@ -81,10 +82,11 @@ function loadContent (name){
             
             app.appendChild(sidebar);
         }
-        function appendIcons(){
-
-        }
         function appendContent(){
+            const mainContent = document.createElement('div');
+            mainContent.setAttribute('id','main');
+            mainContent.classList.add('main');
+            app.appendChild(mainContent);
             const mainModule = {
                 init:function(){
                     console.log('main module loaded');
@@ -110,7 +112,6 @@ function loadContent (name){
         }
         appendSidebar();
         appendContent();
-        appendIcons();
       });
       
 
