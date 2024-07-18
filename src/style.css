@@ -99,5 +99,17 @@ body {
   }
 
   #todayContent{
-    margin: 30px;
+    margin: 40px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .today-container{
+    min-width: 800px;
+  }
+  /*----form styling ------*/
+  .form-div{
+    border: 3px solid var(--sidebar-color);
+    padding: 10px;
+    border-radius: 10px;
   }
