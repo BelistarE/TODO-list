@@ -102,15 +102,67 @@ const addTodayDisplay = {
         descriptionInput.setAttribute('placeholder', 'Description');
         form.appendChild(descriptionInput);
 
+        const otherDetails = document.createElement('div')
+        otherDetails.setAttribute('id', 'other-details');
+        form.appendChild(otherDetails);
+
+        const dueDateInput = document.createElement('input')
+        dueDateInput.setAttribute('type', 'text');
+        dueDateInput.setAttribute('id', 'due-date');
+        dueDateInput.setAttribute('name', 'due-date');
+        otherDetails.appendChild(dueDateInput);
+
+        const prioritiesDiv = document.createElement('div');
+        prioritiesDiv.setAttribute('id', 'priorities-div');
+        otherDetails.appendChild(prioritiesDiv);
+
+
+        const priorities = ['Priority 1', 'Priority 2', 'Priority 3'];
+            priorities.forEach((priority, index) => {
+            const prioritiesContainer = document.createElement('div');
+            prioritiesContainer.classList.add('singlePriority');
+            prioritiesDiv.appendChild(prioritiesContainer);
+            const priorityInput = document.createElement('input');
+            priorityInput.setAttribute('type', 'radio');
+            priorityInput.setAttribute('id', `priority-${index}`);
+            priorityInput.setAttribute('name', 'priority');
+            priorityInput.setAttribute('value', priority.toLowerCase());
+
+            const priorityLabel = document.createElement('label');
+            priorityLabel.setAttribute('for', `priority-${index}`);
+            priorityLabel.textContent = priority;
+
+            prioritiesContainer.appendChild(priorityInput);
+            prioritiesContainer.appendChild(priorityLabel);
+            
+    });
+
+
         formDiv.appendChild(form);
         btnContainer.appendChild(formDiv);
 
+        function formatDate(date, format, locale) {
+            const now = new Date();
+            if (date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()) {
+                return "Today";
+            }
+            return flatpickr.formatDate(date, format, locale);
+        }
+
+        flatpickr("#due-date", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            defaultDate: "today",
+            formatDate: formatDate
+        });
 
     },
 
     cancelForm: function(){
 
     }
+
 };
 
 export default addTodayDisplay;
