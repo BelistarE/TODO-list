@@ -17,7 +17,9 @@ const addTodayDisplay = {
         const taskBtn = document.querySelector('.task-btn');
         taskBtn.addEventListener('click', () => {
             this.addTaskEvent();
+            this.radioLogic();
         });
+
     },
 
     clearContent: function() {
@@ -106,11 +108,32 @@ const addTodayDisplay = {
         otherDetails.setAttribute('id', 'other-details');
         form.appendChild(otherDetails);
 
-        const dueDateInput = document.createElement('input')
+        const dueDateInput = document.createElement('input');
         dueDateInput.setAttribute('type', 'text');
         dueDateInput.setAttribute('id', 'due-date');
         dueDateInput.setAttribute('name', 'due-date');
-        otherDetails.appendChild(dueDateInput);
+        const flatpickrDiv = document.createElement('div');
+        flatpickrDiv.setAttribute("id",'flatpickr-div');
+        flatpickrDiv.appendChild(dueDateInput);
+
+        const dateIcon = document.createElement('span');
+        dateIcon.classList.add('calendar-icon');
+        dateIcon.innerHTML = '&#128197;';
+        flatpickrDiv.appendChild(dateIcon);
+
+        otherDetails.appendChild(flatpickrDiv);
+        function updateCalendarIcon(date) {
+            const dateIcon = document.getElementById('calendar-icon');
+            if (date) {
+                // Example of dynamic update: change color or icon based on the date
+                // For demonstration purposes, we'll just change the text
+                dateIcon.innerHTML = `Selected Date: ${date.toLocaleDateString()}`;
+            } else {
+                // Reset or default state
+                dateIcon.innerHTML = '&#128197;';
+            }
+        }
+        
 
         const prioritiesDiv = document.createElement('div');
         prioritiesDiv.setAttribute('id', 'priorities-div');
@@ -130,6 +153,7 @@ const addTodayDisplay = {
 
             const priorityLabel = document.createElement('label');
             priorityLabel.setAttribute('for', `priority-${index}`);
+            priorityLabel.classList.add('custom-radio');
             priorityLabel.textContent = priority;
 
             prioritiesContainer.appendChild(priorityInput);
@@ -137,6 +161,20 @@ const addTodayDisplay = {
             
     });
 
+        const submitForm = document.createElement('div');
+        submitForm.classList.add('submitForm')
+        form.appendChild(submitForm);
+
+        const cancelButton = document.createElement('button');
+        cancelButton.classList.add('cancel');
+        cancelButton.textContent = 'Cancel';
+        submitForm.appendChild(cancelButton);
+    
+        const submitButton = document.createElement('button');
+        submitButton.setAttribute('type', 'submit');
+        submitButton.textContent = 'Add task';
+        submitButton.classList.add('submit-button'); 
+        submitForm.appendChild(submitButton);
 
         formDiv.appendChild(form);
         btnContainer.appendChild(formDiv);
@@ -154,15 +192,47 @@ const addTodayDisplay = {
             altInput: true,
             altFormat: "F j, Y",
             defaultDate: "today",
-            formatDate: formatDate
+            formatDate: formatDate,
         });
-
+    
+        flatpickrDiv.addEventListener('click', function() {
+            dueDateInput.click(); 
+            console.log("flatpicker clicked");
+        });
+    
+       
     },
 
     cancelForm: function(){
 
+    },
+    radioLogic: function() {
+        // Initialize radio buttons
+        console.log('radiologic initialized');
+        document.querySelectorAll('.singlePriority').forEach(radioDiv => {
+            radioDiv.addEventListener('click', function() {
+                console.log("radio button clicked");
+                const radioInput = this.querySelector('input[type="radio"]');
+                if (!radioInput.checked) {
+                    radioInput.checked = true;
+                    radioInput.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+    
+        document.querySelectorAll('.singlePriority input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                console.log('button changed');
+                document.querySelectorAll('.singlePriority').forEach(div => {
+                    div.classList.remove('checked');
+                });
+                if (this.checked) {
+                    this.closest('.singlePriority').classList.add('checked');
+                }
+            });
+        });
     }
-
+    
 };
 
 export default addTodayDisplay;

@@ -126,6 +126,9 @@ body {
   #other-details{
     display: flex;
     justify-content: space-between;
+    padding-bottom: 10px;
+    margin-top: 20px;
+    border-bottom: 2px solid var(--light-gray);
   }
 
 #priorities-div{
@@ -144,7 +147,6 @@ body {
 .form-div form label {
     background-color: transparent;
     border: none;
-    color: var(--lighter-gray);
 }
 
 .form-div form input[type="radio"] {
@@ -198,17 +200,25 @@ body {
   font-weight: bold;
 }
 
-.form-control {
+#flatpickr-div {
   color: var(--accent-color) !important;
   font-weight: bold; 
+  display: flex;
+  justify-content: space-between;
+  font-weight: lighter;
+  color: var(--accent-color);
   border: 2px solid var(--light-gray) !important;
   border-radius: 10px;
   padding: 10px;
-  width: 50px;
   cursor: pointer;
 }
-.form-control:hover{
+#flatpickr-div:hover{
   background-color: var(--light-gray);
+}
+
+.form-control{
+  cursor: pointer;
+  color: var(--accent-color);
 }
 
 input[type="text"]:focus {
@@ -224,7 +234,7 @@ input[type="text"]{
 }
 
 .singlePriority input[type="radio"] {
-  display: none;
+  display: none; 
 }
 
 .singlePriority:hover{
@@ -236,4 +246,28 @@ input[type="text"]{
 
 .singlePriority *  {
   cursor: pointer;
+}
+
+.singlePriority.checked {
+  background-color: var(--accent-color);
+  color: var(--body-color);
+  border-color: var(--accent-color) !important;
+}
+
+.singlePriority.checked * {
+  color: var(--body-color);
+}
+
+.submitForm{
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.submit-button{
+  background-color: #4c2827;
+  color: var(--lighter-gray);
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
 }
