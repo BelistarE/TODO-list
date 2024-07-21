@@ -39,16 +39,18 @@ const addTodayDisplay = {
             this.viewContent = document.createElement('div');
             this.viewContent.classList.add('viewContent');
 
-            // Append the container to the main div
             mainDiv.appendChild(this.todayContainer);
             
-            // Use 'this' to access todayContainer
+           
             this.todayContainer.appendChild(this.todayDiv); 
             this.todayContainer.appendChild(this.viewContent);
             
-            // Initialize btnContainer here
             this.btnContainer = document.createElement('div');
             this.btnContainer.setAttribute('id', 'btn-container');
+
+            this.tasksContainer = document.createElement('div')
+            this.tasksContainer.setAttribute('id', 'task-container');
+            this.btnContainer.appendChild(this.tasksContainer);
             this.viewContent.appendChild(this.btnContainer);
 
             this.appendDefault();
@@ -62,7 +64,7 @@ const addTodayDisplay = {
         todayHeader.textContent = 'Today';
         
         this.todayDiv.appendChild(todayHeader);
-        this.appendTaskBtn(); // Make sure to call this after btnContainer is initialized
+        this.appendTaskBtn(); 
     },
 
     appendTaskBtn: function() {
@@ -77,14 +79,64 @@ const addTodayDisplay = {
         taskBtn.appendChild(taskText);
         this.btnContainer.appendChild(taskBtn);
     },
+    hideTaskBtn: function(){
+        const removeTaskBtn = document.querySelector('.task-btn');
+        while (removeTaskBtn.firstChild) {
+            removeTaskBtn.removeChild(removeTaskBtn.firstChild);
+        }
+    },
+    appendTask: function(taskName, description, dueDate, priority){
+        
+    
+    },
+    appendTaskToday: function(taskName, description, dueDate, priority) {
+        const container = document.getElementById('task-container');
+        const thisTask = document.createElement('div');
+        thisTask.classList.add('task');
+    
+        const taskTitle = document.createElement('h3');
+        taskTitle.textContent = taskName; 
+        thisTask.appendChild(taskTitle);
+    
+    
+        container.appendChild(thisTask);
 
+    },
     addTaskEvent: function() {
-        console.log('button clicked');
+        let taskName = '';
+        let description = '';
+        let dueDate = '';
+        let priority = '';
         this.addForm();
+        const form = document.querySelector('.form-div > form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();  
+      
+            taskName = document.getElementById('task-name').value;
+            description = document.getElementById('description').value;
+            dueDate = document.getElementById('due-date').value;
+            priority = document.querySelector('input[name="priority"]:checked').value;
+      
+            console.log('Task Name:', taskName);
+            console.log('Description:', description);
+            console.log('Due Date:', dueDate);
+            console.log('Priority:', priority);
+
+            this.appendTask(taskName, description, dueDate, priority);
+
+            if (dueDate === 'Today'){
+                console.log("the task is due today");
+                this.appendTaskToday(taskName, description, dueDate, priority);
+            }
+
+            form.reset();
+        });
+
 
     },
 
     addForm: function(){
+        this.hideTaskBtn();
         const formDiv = document.createElement('div');
         formDiv.classList.add('form-div');
         const btnContainer = document.getElementById('btn-container');
@@ -122,17 +174,6 @@ const addTodayDisplay = {
         flatpickrDiv.appendChild(dateIcon);
 
         otherDetails.appendChild(flatpickrDiv);
-        function updateCalendarIcon(date) {
-            const dateIcon = document.getElementById('calendar-icon');
-            if (date) {
-                // Example of dynamic update: change color or icon based on the date
-                // For demonstration purposes, we'll just change the text
-                dateIcon.innerHTML = `Selected Date: ${date.toLocaleDateString()}`;
-            } else {
-                // Reset or default state
-                dateIcon.innerHTML = '&#128197;';
-            }
-        }
         
 
         const prioritiesDiv = document.createElement('div');
@@ -202,8 +243,12 @@ const addTodayDisplay = {
     
        
     },
-
     cancelForm: function(){
+        this.appendTaskBtn();
+        while (this.mainElement.firstChild) {
+            this.mainElement.removeChild(this.mainElement.firstChild);
+        }
+        console.log('content cleared');
 
     },
     radioLogic: function() {
