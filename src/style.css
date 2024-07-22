@@ -199,7 +199,14 @@ body {
 #task-name::-webkit-input-placeholder {
   font-weight: bold;
 }
-
+#task-name{
+  color: white;
+  font-weight: bold;
+}
+#description{
+  font-weight: lighter;
+  color: white;
+}
 #flatpickr-div {
   color: var(--accent-color) !important;
   font-weight: bold; 
@@ -249,14 +256,35 @@ input[type="text"]{
 }
 
 .singlePriority.checked {
-  background-color: var(--accent-color);
   color: var(--body-color);
-  border-color: var(--accent-color) !important;
+  
 }
 
 .singlePriority.checked * {
   color: var(--body-color);
 }
+#priorities-div > *:nth-child(3){
+  border-color: rgb(61, 150, 61);
+  
+}
+#priorities-div > *:nth-child(3).checked{
+  background-color: rgb(61, 150, 61);
+}
+#priorities-div > *:nth-child(2){
+  border-color: rgb(179, 167, 63);
+  
+}
+#priorities-div > *:nth-child(2).checked{
+  background-color: rgb(179, 167, 63);
+}
+#priorities-div > *:nth-child(1){
+  border-color: var(--accent-color);
+  
+}
+#priorities-div > *:nth-child(1).checked{
+  background-color: var(--accent-color);
+}
+
 
 .submitForm{
   display: flex;
@@ -270,4 +298,50 @@ input[type="text"]{
   font-weight: bold;
   padding: 10px;
   border-radius: 5px;
+}
+
+.cancel{
+  background-color: #2b2b2b;
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 20px;
+}
+.cancel:hover{
+  background-color: #3d3d3d;
+}
+
+.button-active{
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* --- task styling */
+
+.task{
+  display: flex;
+  align-items: center;
+}
+
+.priority-button-check{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid;
+}
+.prioritybutton-1{
+  border-color: var(--accent-color);
+  background-color: rgba(222, 76, 74, 0.2);
+}
+.prioritybutton-2{
+  border-color: rgb(179, 167, 63);
+  background-color: rgb(179, 167, 63, 0.2);
+}
+
+.prioritybutton-3{
+  border-color: rgb(61, 150, 61);
+  background-color: rgb(61, 150, 61, 0.2);
+}
+.task-displaycontent{
+  padding: 10px;
+  padding-left: 20px;
 }

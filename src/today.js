@@ -5,6 +5,7 @@ const addTodayDisplay = {
     mainElement: null,
 
     init: function() {
+        console.log("init");
         this.mainElement = document.querySelector('.main'); 
         if (this.mainElement) {
             this.clearContent();
@@ -14,15 +15,12 @@ const addTodayDisplay = {
         } else {
             console.error('Main element with class "main" not found.');
         }
-        const taskBtn = document.querySelector('.task-btn');
-        taskBtn.addEventListener('click', () => {
-            this.addTaskEvent();
-            this.radioLogic();
-        });
+        
 
     },
 
     clearContent: function() {
+        console.log("clearcontent");
         while (this.mainElement.firstChild) {
             this.mainElement.removeChild(this.mainElement.firstChild);
         }
@@ -30,6 +28,7 @@ const addTodayDisplay = {
     },
 
     appendContainers: function() {
+        console.log("appendcontainers");
         const mainDiv = document.getElementById('todayContent');
         if (mainDiv) {
             this.todayContainer = document.createElement('div');
@@ -50,6 +49,19 @@ const addTodayDisplay = {
 
             this.tasksContainer = document.createElement('div')
             this.tasksContainer.setAttribute('id', 'task-container');
+            this.task1Div = document.createElement('div');
+            this.task1Div.setAttribute('id', 'prioritycontainer-1');
+            this.task1Div.classList.add('priority-num')
+            this.task2Div = document.createElement('div');
+            this.task2Div.setAttribute('id', 'prioritycontainer-2');
+            this.task2Div.classList.add('priority-num')
+            this.task3Div = document.createElement('div');
+            this.task3Div.setAttribute('id', 'prioritycontainer-3');
+            this.task3Div.classList.add('priority-num')
+            this.tasksContainer.appendChild(this.task1Div);
+            this.tasksContainer.appendChild(this.task2Div);
+            this.tasksContainer.appendChild(this.task3Div);
+
             this.btnContainer.appendChild(this.tasksContainer);
             this.viewContent.appendChild(this.btnContainer);
 
@@ -60,6 +72,7 @@ const addTodayDisplay = {
     },
 
     appendDefault: function() {
+        console.log("appenddefault");
         const todayHeader = document.createElement('h1');
         todayHeader.textContent = 'Today';
         
@@ -68,6 +81,7 @@ const addTodayDisplay = {
     },
 
     appendTaskBtn: function() {
+        console.log("appendTaskbtn");
         const taskBtn = document.createElement('button');
         taskBtn.classList.add('task-btn');
         const plusIcon = document.createElement('img');
@@ -78,37 +92,67 @@ const addTodayDisplay = {
         taskBtn.appendChild(plusIcon);
         taskBtn.appendChild(taskText);
         this.btnContainer.appendChild(taskBtn);
+        taskBtn.addEventListener('click', () => {
+            this.addTaskEvent();
+            this.radioLogic();
+        });
     },
-    hideTaskBtn: function(){
-        const removeTaskBtn = document.querySelector('.task-btn');
-        while (removeTaskBtn.firstChild) {
-            removeTaskBtn.removeChild(removeTaskBtn.firstChild);
-        }
+    hideTaskBtn: function() {
+        console.log("hideTaskBtn");
+    
+        // Select all elements with the class 'task-btn'
+        const taskBtns = document.querySelectorAll('.task-btn');
+    
+        // Iterate over each element and remove it
+        taskBtns.forEach(taskBtn => {
+            taskBtn.remove();
+        });
+    
     },
     appendTask: function(taskName, description, dueDate, priority){
+        console.log("appendtask");
         
-    
+        
+        document.getElementById('task-name').value = '';
+        document.getElementById('description').value = '';
+     
     },
     appendTaskToday: function(taskName, description, dueDate, priority) {
-        const container = document.getElementById('task-container');
+        console.log("appendtasktoday");
         const thisTask = document.createElement('div');
+        const taskContent = document.createElement('div');
+        taskContent.classList.add('task-displaycontent');
+        const taskCheck = document.createElement('button');
+        const formattedPriority = priority.replace(" ", "container-").toLowerCase();
+        const selectedPriority = document.getElementById(formattedPriority);
         thisTask.classList.add('task');
-    
+
+        const formattedbuttonclass = priority.replace(" ", "button-").toLowerCase();
+        taskCheck.classList.add(formattedbuttonclass);
+        taskCheck.classList.add('priority-button-check');
+        taskCheck.textContent = " ";
+        thisTask.appendChild(taskCheck);
+
         const taskTitle = document.createElement('h3');
         taskTitle.textContent = taskName; 
-        thisTask.appendChild(taskTitle);
+        taskContent.appendChild(taskTitle);
+        const taskDescription = document.createElement('p');
+        taskDescription.textContent = description;
+        taskContent.appendChild(taskDescription);
     
-    
-        container.appendChild(thisTask);
+        thisTask.appendChild(taskContent);
+        selectedPriority.appendChild(thisTask);
 
     },
     addTaskEvent: function() {
+        console.log("addtaskevent");
         let taskName = '';
         let description = '';
         let dueDate = '';
         let priority = '';
         this.addForm();
         const form = document.querySelector('.form-div > form');
+        const buttonCheck = document.querySelectorAll('.singlePriority');
         form.addEventListener('submit', (event) => {
             event.preventDefault();  
       
@@ -122,20 +166,25 @@ const addTodayDisplay = {
             console.log('Due Date:', dueDate);
             console.log('Priority:', priority);
 
-            this.appendTask(taskName, description, dueDate, priority);
 
             if (dueDate === 'Today'){
                 console.log("the task is due today");
                 this.appendTaskToday(taskName, description, dueDate, priority);
+                buttonCheck.forEach(button => {
+                    button.classList.remove('checked');
+                });
             }
 
-            form.reset();
+            this.appendTask(taskName, description, dueDate, priority);
+
+            
         });
 
 
     },
 
     addForm: function(){
+        console.log("addform");
         this.hideTaskBtn();
         const formDiv = document.createElement('div');
         formDiv.classList.add('form-div');
@@ -209,7 +258,13 @@ const addTodayDisplay = {
         const cancelButton = document.createElement('button');
         cancelButton.classList.add('cancel');
         cancelButton.textContent = 'Cancel';
+        cancelButton.setAttribute('type', 'button');
         submitForm.appendChild(cancelButton);
+
+        cancelButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.cancelForm(); 
+        });
     
         const submitButton = document.createElement('button');
         submitButton.setAttribute('type', 'submit');
@@ -222,8 +277,14 @@ const addTodayDisplay = {
 
         function formatDate(date, format, locale) {
             const now = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(now.getDate() + 1); 
+        
             if (date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()) {
                 return "Today";
+            }
+            if (date.getDate() === tomorrow.getDate() && date.getMonth() === tomorrow.getMonth() && date.getFullYear() === tomorrow.getFullYear()) {
+                return "Tomorrow";
             }
             return flatpickr.formatDate(date, format, locale);
         }
@@ -238,22 +299,30 @@ const addTodayDisplay = {
     
         flatpickrDiv.addEventListener('click', function() {
             dueDateInput.click(); 
-            console.log("flatpicker clicked");
+        });
+
+        taskNameInput.addEventListener('input', function() {
+            if (taskNameInput.value.trim() !== '') {
+                submitButton.classList.remove('button-default');
+                submitButton.classList.add('button-active');
+            } else {
+                submitButton.classList.remove('button-active');
+                submitButton.classList.add('button-default');
+            }
         });
     
        
     },
     cancelForm: function(){
-        this.appendTaskBtn();
-        while (this.mainElement.firstChild) {
-            this.mainElement.removeChild(this.mainElement.firstChild);
+        console.log("cancelForm");
+        const formDiv = document.querySelector('.form-div');
+        if (formDiv) {
+            formDiv.remove(); 
         }
-        console.log('content cleared');
-
+        console.log('form cleared');
+        this.appendTaskBtn(); 
     },
     radioLogic: function() {
-        // Initialize radio buttons
-        console.log('radiologic initialized');
         document.querySelectorAll('.singlePriority').forEach(radioDiv => {
             radioDiv.addEventListener('click', function() {
                 console.log("radio button clicked");
