@@ -7,7 +7,7 @@ const addUpcomingDisplay = {
             this.clearContent();
             console.log('upcoming display initialized');
             this.mainElement.setAttribute('id', 'upcomingContent');
-            
+            this.appendContainers();
         } else {
             console.error('Main element with class "main" not found.');
         }
@@ -22,7 +22,20 @@ const addUpcomingDisplay = {
     },
 
     appendContainers: function(){
+        const mainDiv = document.getElementById('upcomingContent');
+        const upcomingContainer = document.createElement('div');
+        upcomingContainer.setAttribute('id', 'upcoming-div');
 
+        //title
+        const title = document.createElement('h2');
+        title.textContent = "Upcoming";
+        upcomingContainer.appendChild(title);
+
+        //for the future
+        
+
+
+        mainDiv.appendChild(upcomingContainer);
     },
 
 };

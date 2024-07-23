@@ -131,6 +131,9 @@ body {
     max-width: 900px;
     margin: 50px;
   }
+  #today-div{
+    margin-bottom: 15px;
+  }
   .task-btn:hover > img {
     content: url('./icons/add-task.svg'); 
 }
