@@ -26,9 +26,8 @@ const addTodayDisplay = {
     loadToday: function(){
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach(taskData => {
-            console.log("a task had been added");
             this.appendTaskToday(taskData.taskName, taskData.description, taskData.dueDate, taskData.priority);
-            this.addTodo(taskData.taskName, taskData.description, taskData.dueDate, taskData.priority)
+            
 
         });
     },
@@ -93,7 +92,6 @@ const addTodayDisplay = {
     },
 
     appendTaskBtn: function() {
-        console.log("appendTaskbtn");
         const taskBtn = document.createElement('button');
         taskBtn.classList.add('task-btn');
         const plusIcon = document.createElement('img');
@@ -122,23 +120,31 @@ const addTodayDisplay = {
     handleTaskCompletion: function() {
         const buttons = document.querySelectorAll('.priority-button-check');
         buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                console.log('finished task');
-                const taskDiv = button.closest('.task'); // `button` refers to the clicked button
-                
-                if (taskDiv) {
-                    taskDiv.remove();
-                    this.updateBorders(); // `this` refers to the correct object
-                }
-            });
+          button.addEventListener('click', () => {
+            console.log('finished task');
+            const taskDiv = button.closest('.task');
+            
+            if (taskDiv) {
+              const taskId = taskDiv.getAttribute('data-id');
+              this.removeTaskFromLocalStorage(taskId);
+              taskDiv.remove();
+              this.updateBorders();
+            }
+          });
         });
-    },
+      },
+      
+      removeTaskFromLocalStorage: function(taskId) {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const updatedTasks = tasks.filter(task => task.id != taskId);
+        localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+      },
     
     
-    appendTask: function(taskName, description, dueDate, priority) {
+    appendTask: function(taskID, taskName, description, dueDate, priority) {
         console.log("appendtask");
         
-        const taskData = new TaskData(taskName, description, dueDate, priority);
+        const taskData = new TaskData(taskID, taskName, description, dueDate, priority);
         
         // Store taskData in local storage
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -146,9 +152,11 @@ const addTodayDisplay = {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     
     },
-    appendTaskToday: function(taskName, description, dueDate, priority) {
+    appendTaskToday: function(taskName, description, taskId, priority) {
         console.log("appendtasktoday");
+        
         const thisTask = document.createElement('div');
+        thisTask.setAttribute('data-id', taskId);
         const taskContent = document.createElement('div');
         taskContent.classList.add('task-displaycontent');
         const taskCheck = document.createElement('button');
@@ -176,10 +184,6 @@ const addTodayDisplay = {
         this.handleTaskCompletion();
 
         
-    },
-    addTodo: function(taskName, description, dueDate, priority){
-        console.log('added the following todo:')
-        console.log(taskName);
     },
     updateBorders: function(){
         const containers = ['prioritycontainer-1', 'prioritycontainer-2', 'prioritycontainer-3'];
@@ -225,25 +229,22 @@ const addTodayDisplay = {
             description = document.getElementById('description').value;
             dueDate = document.getElementById('due-date').value;
             priority = document.querySelector('input[name="priority"]:checked').value;
-      
+            const taskId = Date.now();
             document.getElementById('task-name').value = '';
             document.getElementById('description').value = '';
 
-            console.log('Task Name:', taskName);
-            console.log('Description:', description);
-            console.log('Due Date:', dueDate);
-            console.log('Priority:', priority);
+            
 
 
             if (dueDate === 'Today'){
                 console.log("the task is due today");
-                this.appendTaskToday(taskName, description, dueDate, priority);
+                this.appendTaskToday(taskName, description, taskId, priority);
                 buttonCheck.forEach(button => {
                     button.classList.remove('checked');
                 });
             }
 
-            this.appendTask(taskName, description, dueDate, priority);
+            this.appendTask(taskId, taskName, description, dueDate, priority);
 
             
         });
