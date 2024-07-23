@@ -1,4 +1,5 @@
 import crossAdd from './icons/plus.svg';
+import TaskData from './storage';
 
 /*hello friend! if you are reading this because you saw this project in TOP and want help or inspiration,
 i sincerely apologize for my jumbeled code. i wrote this over the span of 3 weeks and it is not very organized.
@@ -15,6 +16,7 @@ const addTodayDisplay = {
             console.log('today display initialized');
             this.mainElement.setAttribute('id', 'todayContent');
             this.appendContainers();
+            this.loadToday();
         } else {
             console.error('Main element with class "main" not found.');
         }
@@ -22,7 +24,13 @@ const addTodayDisplay = {
         
     },
     loadToday: function(){
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.forEach(taskData => {
+            console.log("a task had been added");
+            this.appendTaskToday(taskData.taskName, taskData.description, taskData.dueDate, taskData.priority);
+            this.addTodo(taskData.taskName, taskData.description, taskData.dueDate, taskData.priority)
 
+        });
     },
     clearContent: function() {
         
@@ -33,7 +41,6 @@ const addTodayDisplay = {
     },
 
     appendContainers: function() {
-        console.log("appendcontainers");
         const mainDiv = document.getElementById('todayContent');
         if (mainDiv) {
             this.todayContainer = document.createElement('div');
@@ -128,13 +135,16 @@ const addTodayDisplay = {
     },
     
     
-    appendTask: function(taskName, description, dueDate, priority){
+    appendTask: function(taskName, description, dueDate, priority) {
         console.log("appendtask");
         
+        const taskData = new TaskData(taskName, description, dueDate, priority);
         
-        document.getElementById('task-name').value = '';
-        document.getElementById('description').value = '';
-     
+        // Store taskData in local storage
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(taskData);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    
     },
     appendTaskToday: function(taskName, description, dueDate, priority) {
         console.log("appendtasktoday");
@@ -166,6 +176,10 @@ const addTodayDisplay = {
         this.handleTaskCompletion();
 
         
+    },
+    addTodo: function(taskName, description, dueDate, priority){
+        console.log('added the following todo:')
+        console.log(taskName);
     },
     updateBorders: function(){
         const containers = ['prioritycontainer-1', 'prioritycontainer-2', 'prioritycontainer-3'];
@@ -212,6 +226,9 @@ const addTodayDisplay = {
             dueDate = document.getElementById('due-date').value;
             priority = document.querySelector('input[name="priority"]:checked').value;
       
+            document.getElementById('task-name').value = '';
+            document.getElementById('description').value = '';
+
             console.log('Task Name:', taskName);
             console.log('Description:', description);
             console.log('Due Date:', dueDate);

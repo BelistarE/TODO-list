@@ -3,6 +3,7 @@ import todayIcon from './icons/calendar-star.svg';
 import searchIcon from './icons/magnify.svg';
 import upcomingIcon from './icons/calendar-range-outline.svg';
 import sidebarIcon from './icons/sidebar.png';
+import bugIcon from './icons/bug.png';
 
 export function appendSidebar(name) {
     const app = document.getElementById('app');
@@ -65,6 +66,24 @@ export function appendSidebar(name) {
         buttonWrapper.appendChild(buttonElement);
 
         buttonDiv.appendChild(buttonWrapper);
+    });
+
+    const debugBtn = document.createElement('div');
+    debugBtn.classList.add('button-wrapper');
+    debugBtn.classList.add('debug');
+    const bug = document.createElement('img');
+    bug.src = bugIcon;
+    bug.classList.add('button-icon');
+    debugBtn.appendChild(bug);
+    const bugDesc = document.createElement('button')
+    bugDesc.textContent = "Clear History (Debug)";
+    debugBtn.appendChild(bugDesc);
+    sidebar.appendChild(debugBtn);
+
+    debugBtn.addEventListener('click', () => {
+        localStorage.clear();
+        alert("local storage cleared, refresh the page to clear content");
+        console.log('Local storage cleared');
     });
 
     app.appendChild(sidebar);
