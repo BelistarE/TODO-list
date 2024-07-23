@@ -1,6 +1,7 @@
 import './style.css';
 import today from './today';
 import addTask from './addTask';
+import upcoming from './upcoming';
 import { appendSidebar } from './sidebar'; 
 let name = "beli";
 
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cacheDOM: function() {
             this.addTask = document.querySelector('#add-task');
             this.today = document.getElementById('today');
+            this.upcoming = document.getElementById('upcoming');
         },
         btnFunctions: function() {
             this.today.addEventListener('click', () => {
@@ -33,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             this.addTask.addEventListener('click', () => {
                 addTask.init();
+            });
+            this.upcoming.addEventListener('click', () => {
+                upcoming.init();
             });
         },
     }

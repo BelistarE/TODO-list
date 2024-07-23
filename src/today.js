@@ -1,4 +1,3 @@
-import addTaskIcon from './icons/add-task.svg';
 import crossAdd from './icons/plus.svg';
 
 /*hello friend! if you are reading this because you saw this project in TOP and want help or inspiration,
@@ -9,7 +8,7 @@ const addTodayDisplay = {
     mainElement: null,
 
     init: function() {
-        console.log("init");
+        
         this.mainElement = document.querySelector('.main'); 
         if (this.mainElement) {
             this.clearContent();
@@ -22,9 +21,11 @@ const addTodayDisplay = {
         
         
     },
+    loadToday: function(){
 
+    },
     clearContent: function() {
-        console.log("clearcontent");
+        
         while (this.mainElement.firstChild) {
             this.mainElement.removeChild(this.mainElement.firstChild);
         }
@@ -111,6 +112,22 @@ const addTodayDisplay = {
         });
     
     },
+    handleTaskCompletion: function() {
+        const buttons = document.querySelectorAll('.priority-button-check');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                console.log('finished task');
+                const taskDiv = button.closest('.task'); // `button` refers to the clicked button
+                
+                if (taskDiv) {
+                    taskDiv.remove();
+                    this.updateBorders(); // `this` refers to the correct object
+                }
+            });
+        });
+    },
+    
+    
     appendTask: function(taskName, description, dueDate, priority){
         console.log("appendtask");
         
@@ -146,6 +163,7 @@ const addTodayDisplay = {
         selectedPriority.appendChild(thisTask);
 
         this.updateBorders();
+        this.handleTaskCompletion();
 
         
     },
