@@ -99,6 +99,7 @@ body {
   .debug{
     justify-self: flex-end;
     flex: 0 1 auto;
+    padding: 20px;
   }
   /*--------today styling------- */
   .task-btn{
@@ -120,6 +121,9 @@ body {
   .task-btn > p:hover{
     color: var(--accent-color);
   }
+  .task-btn:hover{
+    color: var(--accent-color);
+  }
 
   #todayContent{
     display: flex;
@@ -132,7 +136,7 @@ body {
     margin: 50px;
   }
   #today-div{
-    margin-bottom: 15px;
+    margin-bottom: ;
   }
   .task-btn:hover > img {
     content: url('./icons/add-task.svg'); 
@@ -395,4 +399,25 @@ input[type="text"]{
 
 .border-visible {
   border-bottom: 2px solid var(--light-gray) !important; 
+}
+
+/*----upcoming styling ------------*/
+#upcomingContent{
+  display: flex;
+  justify-content: center;
+}
+#upcoming-div{
+  width: 70%;
+  
+  margin: 50px;
+}
+
+.top{
+  border-bottom: 2px solid var(--light-gray);
+  color: var(--lighter-gray);
+  padding: 10px;
+  padding-left: 0px;
+}
+.today-upcoming{
+  color: white;
 }
