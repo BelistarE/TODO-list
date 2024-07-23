@@ -345,3 +345,12 @@ input[type="text"]{
   padding: 10px;
   padding-left: 20px;
 }
+
+#prioritycontainer-1,
+#prioritycontainer-2 {
+  border-bottom: none; 
+}
+
+.border-visible {
+  border-bottom: 2px solid var(--light-gray) !important; 
+}

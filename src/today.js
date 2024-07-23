@@ -1,6 +1,10 @@
 import addTaskIcon from './icons/add-task.svg';
 import crossAdd from './icons/plus.svg';
 
+/*hello friend! if you are reading this because you saw this project in TOP and want help or inspiration,
+i sincerely apologize for my jumbeled code. i wrote this over the span of 3 weeks and it is not very organized.
+give me a follow on insta tho @is_abeli
+*/
 const addTodayDisplay = {
     mainElement: null,
 
@@ -16,7 +20,7 @@ const addTodayDisplay = {
             console.error('Main element with class "main" not found.');
         }
         
-
+        
     },
 
     clearContent: function() {
@@ -100,10 +104,8 @@ const addTodayDisplay = {
     hideTaskBtn: function() {
         console.log("hideTaskBtn");
     
-        // Select all elements with the class 'task-btn'
         const taskBtns = document.querySelectorAll('.task-btn');
     
-        // Iterate over each element and remove it
         taskBtns.forEach(taskBtn => {
             taskBtn.remove();
         });
@@ -143,6 +145,37 @@ const addTodayDisplay = {
         thisTask.appendChild(taskContent);
         selectedPriority.appendChild(thisTask);
 
+        this.updateBorders();
+
+        
+    },
+    updateBorders: function(){
+        const containers = ['prioritycontainer-1', 'prioritycontainer-2', 'prioritycontainer-3'];
+  
+        
+        const containersWithContent = containers
+            .map(containerId => document.getElementById(containerId))
+            .filter(container => container && container.hasChildNodes());
+        
+        
+        containers.forEach((containerId, index) => {
+            const container = document.getElementById(containerId);
+            
+            if (container) {
+               
+                const hasContent = containersWithContent.includes(container);
+                
+                
+                const isNotLastWithContent = index < containersWithContent.length - 1;
+                
+                
+                if (hasContent && isNotLastWithContent) {
+                    container.classList.add('border-visible');
+                } else {
+                    container.classList.remove('border-visible');
+                }
+            }
+        });
     },
     addTaskEvent: function() {
         console.log("addtaskevent");
