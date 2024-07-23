@@ -95,25 +95,39 @@ body {
     display: flex;
     width: 100%;
     align-items: center;
+    justify-content: flex-start;
+    margin-top: 30px;
   }
   .task-btn > img{
-    width: 50px;
+    width: 30px;
+  }
+  .task-btn > p{
+    color: var(--lighter-gray);
+    flex:1;
+    text-align: left;
+    margin-left: 15px;
+  }
+  .task-btn > p:hover{
+    color: var(--accent-color);
   }
 
   #todayContent{
-    margin: 40px;
     display: flex;
     justify-content: center;
   }
-
+ 
   .today-container{
-    min-width: 800px;
+    width: 60%;
+    max-width: 900px;
+    margin: 50px;
   }
   /*----form styling ------*/
   .form-div{
     border: 2px solid var(--light-gray);
     padding: 10px;
     border-radius: 10px;
+    min-width: 530px;
+    margin-top: 30px;
   }
 
   .form-div> form {
