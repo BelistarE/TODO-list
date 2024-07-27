@@ -100,6 +100,29 @@ const addUpcomingDisplay = {
         console.log("Sorted dates:", sortedDates);
         
         sortedDates.forEach(date => {
+            if (date !== "Tomorrow" && date !== "Today"){
+            const parsedDate = parse(date, 'MMMM d', new Date());
+            console.log(`Parsed date for '${date}':`, parsedDate)
+
+            const formattedDate = format(parsedDate, 'yyyy-MM-dd');
+            if (!this.checkOverdue(formattedDate)) {
+                console.log("Processing date:", date);
+                const dateDiv = document.createElement('div');
+                dateDiv.classList.add('date-div');
+                const thisDate = document.createElement('h4');
+                thisDate.textContent = date;
+                const dateClass = date.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase();
+                dateDiv.classList.add(dateClass);
+                const top = document.createElement('div');
+                top.classList.add('top');
+        
+                top.appendChild(thisDate);
+                dateDiv.appendChild(top);
+        
+                const upcomingContainer = document.getElementById("upcoming-div");
+                upcomingContainer.appendChild(dateDiv);
+            }
+            }else{
             if (!this.checkOverdue(date)) {
                 console.log("Processing date:", date);
                 const dateDiv = document.createElement('div');
@@ -117,6 +140,8 @@ const addUpcomingDisplay = {
                 const upcomingContainer = document.getElementById("upcoming-div");
                 upcomingContainer.appendChild(dateDiv);
             }
+        }
+        
         });
         
         this.checkForToday();

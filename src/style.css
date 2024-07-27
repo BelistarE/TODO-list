@@ -428,3 +428,7 @@ input[type="text"]{
   border-radius: 50%;
   border: 3px solid white;
 }
+
+.overdue-dates h4{
+  color: var(--accent-color);
+}
