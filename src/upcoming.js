@@ -1,4 +1,4 @@
-import { format, parseISO, isValid } from 'date-fns';
+import { format, parseISO, isValid, startOfToday, isBefore, parse } from 'date-fns';
 import TaskData from './storage';
 
 const addUpcomingDisplay = {
@@ -55,10 +55,26 @@ const addUpcomingDisplay = {
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
         console.log("today", today, "tomorrow", tomorrow);
-        // Format the dates using date-fns
-        const todayFormatted = format(today, 'MMMM-d');
-        const tomorrowFormatted = format(tomorrow, 'MMMM-d');
-        console.log(todayFormatted);
+        
+        const overdueDates = uniqueDates.filter(this.checkOverdue);
+        console.log("overdueDates", overdueDates);
+
+        if (overdueDates){
+            const dateDiv = document.createElement('div');
+            dateDiv.classList.add('date-div');
+            dateDiv.classList.add("overdue-dates")
+            const thisDate = document.createElement('h4');
+            thisDate.textContent = "Overdue";
+    
+            const top = document.createElement('div');
+            top.classList.add('top');
+    
+            top.appendChild(thisDate);
+            dateDiv.appendChild(top);
+    
+            const upcomingContainer = document.getElementById("upcoming-div");
+            upcomingContainer.appendChild(dateDiv);
+        }
 
         const formattedDates = uniqueDates.map(date => {
             console.log(date);
@@ -82,25 +98,27 @@ const addUpcomingDisplay = {
         });
     
         console.log("Sorted dates:", sortedDates);
-    
+        
         sortedDates.forEach(date => {
-            console.log("Processing date:", date);
-            const dateDiv = document.createElement('div');
-            dateDiv.classList.add('date-div');
-            const thisDate = document.createElement('h4');
-            thisDate.textContent = date;
-            const dateClass = date.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase();
-            dateDiv.classList.add(dateClass);
-            const top = document.createElement('div');
-            top.classList.add('top');
-    
-            top.appendChild(thisDate);
-            dateDiv.appendChild(top);
-    
-            const upcomingContainer = document.getElementById("upcoming-div");
-            upcomingContainer.appendChild(dateDiv);
+            if (!this.checkOverdue(date)) {
+                console.log("Processing date:", date);
+                const dateDiv = document.createElement('div');
+                dateDiv.classList.add('date-div');
+                const thisDate = document.createElement('h4');
+                thisDate.textContent = date;
+                const dateClass = date.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase();
+                dateDiv.classList.add(dateClass);
+                const top = document.createElement('div');
+                top.classList.add('top');
+        
+                top.appendChild(thisDate);
+                dateDiv.appendChild(top);
+        
+                const upcomingContainer = document.getElementById("upcoming-div");
+                upcomingContainer.appendChild(dateDiv);
+            }
         });
-    
+        
         this.checkForToday();
     },       
     
@@ -133,6 +151,30 @@ const addUpcomingDisplay = {
     },
 
     addTasks: function(task) {
+        //check for iverdue dates and add them to the overdue container
+        if (this.checkOverdue(task.dueDate)){
+            console.log("processing overdue task", task.dueDate)
+            const overdueDiv = document.querySelector(".overdue-dates");
+            const taskDiv = document.createElement('div');
+            taskDiv.classList.add('task');
+            
+            const taskDescDiv = document.createElement('div');
+            taskDescDiv.classList.add('task-div-upcoming');
+            const taskTitle = document.createElement('h3');
+            taskTitle.textContent = task.taskName;
+            
+            const taskDescription = document.createElement('p');
+            taskDescription.textContent = task.description;
+            
+            const finishButton = document.createElement('button');
+            finishButton.classList.add('task-btn-upcoming');
+            taskDiv.appendChild(finishButton);
+        
+            taskDescDiv.appendChild(taskTitle);
+            taskDescDiv.appendChild(taskDescription);
+            taskDiv.appendChild(taskDescDiv);
+            overdueDiv.appendChild(taskDiv);
+        }
         const today = new Date();
         const tomorrow = new Date(Date.now() + 86400000); // Add 24 hours in milliseconds
     
@@ -140,10 +182,10 @@ const addUpcomingDisplay = {
         const tomorrowFormatted = format(tomorrow, 'yyyy-MM-dd');
         
         let formattedDate;
-        if (task.dueDate === todayFormatted) {
-            formattedDate = 'Today';
-        } else if (task.dueDate === tomorrowFormatted) {
-            formattedDate = 'Tomorrow';
+        if (task.dueDate === "Today") {
+            formattedDate = 'today';
+        } else if (task.dueDate === "Tomorrow") {
+            formattedDate = 'tomorrow';
         } else {
             const parsedDate = parseISO(task.dueDate);
             if (!isValid(parsedDate)) {
@@ -157,7 +199,7 @@ const addUpcomingDisplay = {
         let dateClass = formattedDate.replace(/\s+/g, '-').replace(/[^\w-]/g, '').toLowerCase();
         
         console.log(dateClass);
-       
+        if (!this.checkOverdue(task.dueDate)) {
         // Find or create the div for the task's due date
         let dateDiv = document.querySelector(`.${dateClass}`);
         
@@ -193,6 +235,7 @@ const addUpcomingDisplay = {
         taskDescDiv.appendChild(taskDescription);
         taskDiv.appendChild(taskDescDiv);
         dateDiv.appendChild(taskDiv);
+        }
     },    
     
     loadTasks: function() {
@@ -203,6 +246,16 @@ const addUpcomingDisplay = {
         tasks.forEach(task => {
             this.addTasks(task);
         });
+    },
+    checkOverdue: function(dateString) {
+        // Get today's date at midnight
+        const today = startOfToday();
+    
+        // Parse the input date string into a Date object
+        const inputDate = parseISO(dateString);
+    
+        // Check if the input date is before today
+        return isBefore(inputDate, today);
     },
 
 };
