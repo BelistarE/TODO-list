@@ -26,8 +26,9 @@ const addTodayDisplay = {
     loadToday: function(){
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach(taskData => {
+            if(taskData.dueDate === "Today"){
             this.appendTaskToday(taskData.taskName, taskData.description, taskData.dueDate, taskData.priority);
-            
+            }
 
         });
     },
@@ -150,7 +151,37 @@ const addTodayDisplay = {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.push(taskData);
         localStorage.setItem('tasks', JSON.stringify(tasks));
+
+        //alert the user that the task has been added even tho nothing shows up
+        if(dueDate !== "Today"){
+           const alertDiv = document.querySelector(".alert-container");
+            if (!alertDiv) {
+                console.error("Alert container not found");
+                return;
+            }
+            const alertBox = document.createElement('div');
+            const alertText = document.createElement("p");
+            alertText.classList.add("alert-text");
+            alertText.textContent= "Task has been added to upcoming tasks";
+            alertBox.appendChild(alertText);
+            alertDiv.appendChild(alertBox);
+            alertBox.classList.add('alert-box');
+
+            setTimeout(() => {
+                alertBox.classList.add('fade-out');
+                
+            }, 2000);
+        
+            // Optionally, remove the alert box from the DOM after the fade-out transition
+            setTimeout(() => {
+                alertDiv.removeChild(alertBox);
+            }, 3000);
+        }
+
     
+    },
+    alertTaskAdded: function(){
+
     },
     appendTaskToday: function(taskName, description, taskId, priority) {
         console.log("appendtasktoday");
@@ -235,7 +266,6 @@ const addTodayDisplay = {
 
             
 
-
             if (dueDate === 'Today'){
                 console.log("the task is due today");
                 this.appendTaskToday(taskName, description, taskId, priority);
@@ -258,6 +288,9 @@ const addTodayDisplay = {
         const formDiv = document.createElement('div');
         formDiv.classList.add('form-div');
         const btnContainer = document.getElementById('btn-container');
+        const alertContainer = document.createElement('div');
+        alertContainer.classList.add("alert-container");
+        btnContainer.appendChild(alertContainer);
         const form = document.createElement('form');
 
         const taskNameInput = document.createElement('input');

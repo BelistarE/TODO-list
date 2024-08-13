@@ -42,6 +42,7 @@ const addUpcomingDisplay = {
         mainDiv.appendChild(upcomingContainer);
         this.addDayDivs();
         this.loadTasks();
+        this.checkComplete();
         
     },
     addDayDivs: function() {
@@ -182,6 +183,7 @@ const addUpcomingDisplay = {
             const overdueDiv = document.querySelector(".overdue-dates");
             const taskDiv = document.createElement('div');
             taskDiv.classList.add('task');
+            taskDiv.setAttribute('data-id', task.id);
             
             const taskDescDiv = document.createElement('div');
             taskDescDiv.classList.add('task-div-upcoming');
@@ -243,6 +245,7 @@ const addUpcomingDisplay = {
         
         const taskDiv = document.createElement('div');
         taskDiv.classList.add('task');
+        taskDiv.setAttribute('data-id', task.id);
         
         const taskDescDiv = document.createElement('div');
         taskDescDiv.classList.add('task-div-upcoming');
@@ -273,14 +276,36 @@ const addUpcomingDisplay = {
         });
     },
     checkOverdue: function(dateString) {
-        // Get today's date at midnight
         const today = startOfToday();
     
-        // Parse the input date string into a Date object
         const inputDate = parseISO(dateString);
     
-        // Check if the input date is before today
         return isBefore(inputDate, today);
+    },
+    checkComplete: function() {
+        const deleteButtons = document.querySelectorAll('.task-btn-upcoming');
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const taskElement = button.closest('.task');
+    
+                if (taskElement) {
+                    const taskId = taskElement.getAttribute('data-id');
+    
+                    taskElement.remove();
+                    
+                    // Remove the task from localStorage
+                    const updatedTasks = tasks.filter(task => task.id !== parseInt(taskId));
+                    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    
+                    console.log("Task with ID " + taskId + " deleted");
+                }
+            });
+        });
+    },
+    checkIfViableDate: function(){
+        
     },
 
 };

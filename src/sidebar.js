@@ -25,6 +25,7 @@ export function appendSidebar(name) {
     const sidebarDiv = document.createElement('div');
     const sdbrIcon = document.createElement('img');
     sdbrIcon.classList.add('icon');
+    sdbrIcon.setAttribute('id','toggleButton');
     sdbrIcon.src = sidebarIcon;
 
     //custom name goes here
@@ -40,7 +41,6 @@ export function appendSidebar(name) {
     headerLeft.appendChild(greeting);
     headerLeft.appendChild(userName);
     sidebar.appendChild(buttonDiv);
-
     const buttons = [
         { text: 'Add Task', id: 'add-task', icon: addTaskIcon },
         { text: 'Search', id: 'search', icon: searchIcon },
@@ -87,4 +87,31 @@ export function appendSidebar(name) {
     });
 
     app.appendChild(sidebar);
+    //sidebar collapse button logic
+
+    const isCollapsed = document.querySelector('.collapsed');
+
+    document.getElementById('toggleButton').addEventListener('click', function() {
+        console.log("sidebar button clicked");
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.add('collapsed');
+        
+      });
+
+      if (isCollapsed) {
+        sdbrIcon.style.display = 'block';
+        sdbrIcon.style.position = 'fixed';
+        
+            // reopen the sidebar
+            const sdbrBtn = document.getElementById('toggleButton');
+            sdbrBtn.addEventListener('click', function() {
+
+            sidebar.classList.remove('collapsed');;
+            sdbrIcon.style.position = 'static';
+
+            });
+      }
+      
+      
+      
 }
