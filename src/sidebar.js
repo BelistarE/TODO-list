@@ -9,6 +9,8 @@ export function appendSidebar(name) {
     const app = document.getElementById('app');
     const sidebar = document.createElement('div');
     sidebar.classList.add('sidebar');
+    const hiddenBtn = document.createElement('div');
+    hiddenBtn.classList.add('hiddenBtn')
 
     const header = document.createElement('div');
     header.setAttribute('id', 'header');
@@ -23,9 +25,9 @@ export function appendSidebar(name) {
 
     //icon stuff
     const sidebarDiv = document.createElement('div');
+    sidebarDiv.classList.add('toggleButton')
     const sdbrIcon = document.createElement('img');
     sdbrIcon.classList.add('icon');
-    sdbrIcon.setAttribute('id','toggleButton');
     sdbrIcon.src = sidebarIcon;
 
     //custom name goes here
@@ -89,29 +91,22 @@ export function appendSidebar(name) {
     app.appendChild(sidebar);
     //sidebar collapse button logic
 
-    const isCollapsed = document.querySelector('.collapsed');
-
-    document.getElementById('toggleButton').addEventListener('click', function() {
+    document.querySelector('.toggleButton').addEventListener('click', function() {
         console.log("sidebar button clicked");
         const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.add('collapsed');
         
-      });
-
-      if (isCollapsed) {
-        sdbrIcon.style.display = 'block';
-        sdbrIcon.style.position = 'fixed';
-        
-            // reopen the sidebar
-            const sdbrBtn = document.getElementById('toggleButton');
-            sdbrBtn.addEventListener('click', function() {
-
-            sidebar.classList.remove('collapsed');;
-            sdbrIcon.style.position = 'static';
-
-            });
-      }
-      
+        if (sidebar.classList.contains('collapsed')) {
+            // Reopen the sidebar
+            sidebar.classList.remove('collapsed');
+            sidebarDiv.classList.remove('translateRight');
+        } else {
+            // Collapse the sidebar
+            sidebar.classList.add('collapsed');
+            sidebarDiv.classList.add('translateRight');
+            
+        }
+    });
+    
       
       
 }
