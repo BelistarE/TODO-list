@@ -153,36 +153,38 @@ const addTodayDisplay = {
         localStorage.setItem('tasks', JSON.stringify(tasks));
 
         //alert the user that the task has been added even tho nothing shows up
-        if(dueDate !== "Today"){
-           const alertDiv = document.querySelector(".alert-container");
-            if (!alertDiv) {
-                console.error("Alert container not found");
+        if (dueDate !== "Today") {
+            const alertDiv = document.querySelector(".alert-container");
+            const formDiv = document.querySelector(".form-div"); // Get the form container
+            if (!alertDiv || !formDiv) {
+                console.error("Alert container or form container not found");
                 return;
             }
-            const alertBox = document.createElement('div');
+        
+            let alertBox = document.createElement('div');
             const alertText = document.createElement("p");
             alertText.classList.add("alert-text");
-            alertText.textContent= "Task has been added to upcoming tasks";
+            alertText.textContent = "Task has been added to upcoming tasks";
             alertBox.appendChild(alertText);
             alertDiv.appendChild(alertBox);
             alertBox.classList.add('alert-box');
-
+        
+            // Add margin-top to the form container to create space for the alert
+            formDiv.style.marginTop = alertBox.offsetHeight + 'px';
+        
             setTimeout(() => {
                 alertBox.classList.add('fade-out');
-                
             }, 2000);
         
-            // Optionally, remove the alert box from the DOM after the fade-out transition
             setTimeout(() => {
                 alertDiv.removeChild(alertBox);
-            }, 3000);
-        }
+                formDiv.style.marginTop = '0'; // Reset margin-top after alert is removed
+            }, 3000); 
+        }        
 
     
     },
-    alertTaskAdded: function(){
-
-    },
+    
     appendTaskToday: function(taskName, description, taskId, priority) {
         console.log("appendtasktoday");
         
