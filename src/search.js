@@ -4,6 +4,13 @@ const addSearchDisplay = {
 
         this.mainElement = document.querySelector('.main'); 
         if (this.mainElement) {
+            //highlight sidebar
+            const currentElements = document.querySelectorAll('.current');
+            currentElements.forEach(element => {
+                element.classList.remove('current');
+            });
+            const thsButton = document.getElementById('search');
+            thsButton.classList.add('current');
             this.mainElement.setAttribute('id', 'searchPage');
             this.clearContent();
             this.appendContainers();
