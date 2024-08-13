@@ -507,3 +507,44 @@ input[type="text"]{
     background-repeat: no-repeat;
     background-size: 120% 2px; /* Adjust the percentage to control the length */
 }
+
+/*--------search stuff ----------*/
+.search-container{
+  margin: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.search-group{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-bar{
+  background-color: var(--sidebar-color);
+  border-color: var(--light-gray);
+  border: 2px solid var(--light-gray);
+  width: 40%;
+  height: 40px;
+  border-radius: 15px;
+  color: white;
+}
+.search-btn{
+  height: 100%;
+  padding: 10px;
+  margin-left: 10px;
+  border: 2px solid var(--accent-color);
+  border-radius: 15px;
+}
+.search-btn:hover{
+  background-color: var(--accent-color);
+  color: var(--sidebar-color);
+  font-weight: bold;
+}
+.search-btn:active{
+  background-color: var(--sidebar-color);
+  color: white;
+  font-weight: bold;
+}
