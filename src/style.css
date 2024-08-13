@@ -548,3 +548,9 @@ input[type="text"]{
   color: white;
   font-weight: bold;
 }
+.result{
+  margin: 30px;
+  padding: 25px;
+  border: 2px solid var(--accent-color);
+  border-radius: 15px;
+}
