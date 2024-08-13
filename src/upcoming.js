@@ -11,6 +11,7 @@ const addUpcomingDisplay = {
             console.log('upcoming display initialized');
             this.mainElement.setAttribute('id', 'upcomingContent');
             this.appendContainers();
+            this.checkComplete();
         } else {
             console.error('Main element with class "main" not found.');
         }
@@ -42,7 +43,7 @@ const addUpcomingDisplay = {
         mainDiv.appendChild(upcomingContainer);
         this.addDayDivs();
         this.loadTasks();
-        this.checkComplete();
+        this.checkIfViableDate();
         
     },
     addDayDivs: function() {
@@ -284,7 +285,6 @@ const addUpcomingDisplay = {
     },
     checkComplete: function() {
         const deleteButtons = document.querySelectorAll('.task-btn-upcoming');
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     
         deleteButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -295,17 +295,30 @@ const addUpcomingDisplay = {
     
                     taskElement.remove();
                     
-                    // Remove the task from localStorage
-                    const updatedTasks = tasks.filter(task => task.id !== parseInt(taskId));
-                    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+                    // Retrieve and update tasks in localStorage
+                    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                    tasks = tasks.filter(task => task.id !== parseInt(taskId));
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
     
                     console.log("Task with ID " + taskId + " deleted");
+    
+                    this.checkIfViableDate();
                 }
             });
         });
     },
-    checkIfViableDate: function(){
-        
+    checkIfViableDate: function() {
+        const dateDivs = document.querySelectorAll('.date-div');
+    
+        dateDivs.forEach(dateDiv => {
+            if (dateDiv.children.length === 1) {
+                // Only one child, hide the dateDiv
+                dateDiv.style.display = 'none';
+            } else {
+                // Two or more children, show the dateDiv
+                dateDiv.style.display = 'block';
+            }
+        });
     },
 
 };
