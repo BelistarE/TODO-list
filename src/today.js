@@ -12,6 +12,13 @@ const addTodayDisplay = {
         
         this.mainElement = document.querySelector('.main'); 
         if (this.mainElement) {
+            //highlight sidebar
+            const currentElements = document.querySelectorAll('.current');
+            currentElements.forEach(element => {
+                element.classList.remove('current');
+            });
+            const thsButton = document.getElementById('today');
+            thsButton.classList.add('current');
             this.clearContent();
             console.log('today display initialized');
             this.mainElement.setAttribute('id', 'todayContent');
@@ -27,7 +34,7 @@ const addTodayDisplay = {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach(taskData => {
             if(taskData.dueDate === "Today"){
-            this.appendTaskToday(taskData.taskName, taskData.description, taskData.dueDate, taskData.priority);
+            this.appendTaskToday(taskData.taskName, taskData.description, taskData.id, taskData.priority);
             }
 
         });
@@ -136,6 +143,7 @@ const addTodayDisplay = {
       },
       
       removeTaskFromLocalStorage: function(taskId) {
+        console.log("removing task " + taskId);
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         const updatedTasks = tasks.filter(task => task.id != taskId);
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
@@ -143,7 +151,6 @@ const addTodayDisplay = {
     
     
     appendTask: function(taskID, taskName, description, dueDate, priority) {
-        console.log("appendtask");
         
         const taskData = new TaskData(taskID, taskName, description, dueDate, priority);
         
@@ -168,9 +175,10 @@ const addTodayDisplay = {
             alertBox.appendChild(alertText);
             alertDiv.appendChild(alertBox);
             alertBox.classList.add('alert-box');
+            alertBox.style.marginTop = '20px';
         
             // Add margin-top to the form container to create space for the alert
-            formDiv.style.marginTop = alertBox.offsetHeight + 'px';
+            formDiv.style.marginTop = '40px';
         
             setTimeout(() => {
                 alertBox.classList.add('fade-out');
@@ -178,7 +186,7 @@ const addTodayDisplay = {
         
             setTimeout(() => {
                 alertDiv.removeChild(alertBox);
-                formDiv.style.marginTop = '0'; // Reset margin-top after alert is removed
+                formDiv.style.marginTop = '30px'; //reset
             }, 3000); 
         }        
 
@@ -186,7 +194,7 @@ const addTodayDisplay = {
     },
     
     appendTaskToday: function(taskName, description, taskId, priority) {
-        console.log("appendtasktoday");
+        console.log("appendtasktoday, id ="+ taskId);
         
         const thisTask = document.createElement('div');
         thisTask.setAttribute('data-id', taskId);
@@ -196,7 +204,7 @@ const addTodayDisplay = {
         const formattedPriority = priority.replace(" ", "container-").toLowerCase();
         const selectedPriority = document.getElementById(formattedPriority);
         thisTask.classList.add('task');
-
+        thisTask.setAttribute('data-id', taskId);        
         const formattedbuttonclass = priority.replace(" ", "button-").toLowerCase();
         taskCheck.classList.add(formattedbuttonclass);
         taskCheck.classList.add('priority-button-check');
@@ -247,42 +255,48 @@ const addTodayDisplay = {
         });
     },
     addTaskEvent: function() {
-        console.log("addtaskevent");
-        let taskName = '';
-        let description = '';
-        let dueDate = '';
-        let priority = '';
-        this.addForm();
-        const form = document.querySelector('.form-div > form');
-        const buttonCheck = document.querySelectorAll('.singlePriority');
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();  
-      
-            taskName = document.getElementById('task-name').value;
-            description = document.getElementById('description').value;
-            dueDate = document.getElementById('due-date').value;
-            priority = document.querySelector('input[name="priority"]:checked').value;
-            const taskId = Date.now();
-            document.getElementById('task-name').value = '';
-            document.getElementById('description').value = '';
+    let taskName = '';
+    let description = '';
+    let dueDate = '';
+    let priority = '';
+    this.addForm();
+    const form = document.querySelector('.form-div > form');
+    const buttonCheck = document.querySelectorAll('.singlePriority');
 
-            
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const prioritiesDiv = document.getElementById('priorities-div');
+        prioritiesDiv.classList.remove('priorities-red');
+        taskName = document.getElementById('task-name').value;
+        description = document.getElementById('description').value;
+        dueDate = document.getElementById('due-date').value;
 
-            if (dueDate === 'Today'){
-                console.log("the task is due today");
-                this.appendTaskToday(taskName, description, taskId, priority);
-                buttonCheck.forEach(button => {
-                    button.classList.remove('checked');
-                });
-            }
+        // Check if a priority is selected
+        const selectedPriority = document.querySelector('input[name="priority"]:checked');
+        if (!selectedPriority) {
+            prioritiesDiv.classList.add('priorities-red');
 
-            this.appendTask(taskId, taskName, description, dueDate, priority);
+            return; // Stop the function from proceeding
+        }
 
-            
-        });
+        priority = selectedPriority.value;
+        const taskId = Date.now();
+        document.getElementById('task-name').value = '';
+        document.getElementById('description').value = '';
+        if (dueDate === 'Today'){
+            console.log("tid="+ taskId );
+            this.appendTaskToday(taskName, description, taskId, priority);
+            buttonCheck.forEach(button => {
+                button.classList.remove('checked');
+            });
+        }
 
+        this.appendTask(taskId, taskName, description, dueDate, priority);
+        const sbmtBtn = document.querySelector('.submit-button');
+        sbmtBtn.classList.remove('button-active');
+    });
+},
 
-    },
 
     addForm: function(){
         console.log("addform");

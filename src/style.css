@@ -193,6 +193,8 @@ body {
 #priorities-div{
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
 
 #priorities-div > div {
@@ -275,6 +277,7 @@ body {
   border: 2px solid var(--light-gray) !important;
   border-radius: 10px;
   padding: 10px;
+  margin-bottom: 5px;
   cursor: pointer;
 }
 #flatpickr-div:hover{
@@ -493,4 +496,14 @@ input[type="text"]{
 .form-div {
   transition: margin-top 0.5s ease;
 }
+.priorities-red{
+  border: 2px solid var(--accent-color);
+}
 
+.current{
+  border-bottom: 2px solid transparent; 
+    background: linear-gradient(to right, transparent 25%, var(--accent-color) 25%, var(--accent-color) 75%, transparent 75%);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: 120% 2px; /* Adjust the percentage to control the length */
+}

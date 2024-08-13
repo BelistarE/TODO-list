@@ -7,6 +7,12 @@ const addUpcomingDisplay = {
         
         this.mainElement = document.querySelector('.main'); 
         if (this.mainElement) {
+            const currentElements = document.querySelectorAll('.current');
+            currentElements.forEach(element => {
+                element.classList.remove('current');
+            });
+            const thsButton = document.getElementById('upcoming');
+            thsButton.classList.add('current');
             this.clearContent();
             console.log('upcoming display initialized');
             this.mainElement.setAttribute('id', 'upcomingContent');
