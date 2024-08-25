@@ -1,5 +1,5 @@
 # TODO-list
-Todo list app
+Todo list app from The Odin Project
 
 # TODO
 1. add mobile support
