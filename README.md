@@ -1,5 +1,5 @@
 # TODO-list
-Todo list TOP
+Todo list app
 
 # TODO
 1. add mobile support
